@@ -1,0 +1,10 @@
+html
+  head
+    link(rel="stylesheet", href="/css/style.css")
+    title 42Race - Authorization successfull
+  body
+    .main
+        img.strava-icon(src="/img/strava-icon.png", alt="Strava Icon")
+        h2.label Strava
+        a.athlet-link(href= athletUrl)= athletUrl
+        a.disconnect-btn(href="/authorize/disconnect") Disconnect

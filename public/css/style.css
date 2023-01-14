@@ -15,7 +15,6 @@
 }
 
 .connect-btn {
-    display: block;
     background-color: #f26222;
     width: 400px;
     height: 40px;
@@ -29,4 +28,24 @@
     justify-content: center;
     align-items: center;
     text-decoration: none;
+}
+
+.disconnect-btn {
+    border: 1px solid #f26222;
+    width: 400px;
+    height: 40px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #f26222;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 14px;
+}
+
+.athlet-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
