@@ -1,13 +1,16 @@
 const express = require('express')
 const session = require('express-session')
+const bodyParser = require('body-parser')
 const passport = require('passport')
 const { logger, errorLogger } = require('./utils/logger')
 const { ensureAuthenticated } = require('./utils/common')
 require('dotenv').config()
 
 const authRoutes = require('./routes/auth')
+const webhookRoutes = require('./routes/webhook')
 
 const app = express()
+app.use(bodyParser.json())
 
 const sess = {
   secret: '42race xyz',
@@ -25,8 +28,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(logger)
-/* static files */
 app.use(express.static('public'))
+app.use('/webhook', webhookRoutes)
 app.use('/authorize', authRoutes)
 app.use(ensureAuthenticated)
 app.use(errorLogger)

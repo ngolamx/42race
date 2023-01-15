@@ -35,7 +35,7 @@ passport.deserializeUser(function(obj, done) {
 });
 
 router.get('/', function(req, res, next){
-    passport.authenticate('strava', { scope: ['read'], approvalPrompt: "force" })(req, res, next)
+    passport.authenticate('strava', { scope: ['read,activity:read'], approvalPrompt: "force" })(req, res, next)
   });
 
 
