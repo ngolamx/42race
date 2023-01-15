@@ -1,7 +1,8 @@
 const axios = require('../utils/axios')
 const moment = require('moment')
 const { log } = require('../utils/logger')
-const Activity = require('../models/activity')
+const Activity = require('../models/activity');
+const factory = require('./handlerFactory');
 
 exports.addNewlyActivities = async function (req, res) {
     if (req.user) {
@@ -24,3 +25,10 @@ exports.addNewlyActivities = async function (req, res) {
     }
     res.sendStatus(201)
 }
+
+
+exports.getAllActivities = factory.getAll(Activity);
+exports.getActivity = factory.getOne(Activity);
+exports.createActivity = factory.createOne(Activity);
+exports.updateActivity = factory.updateOne(Activity);
+exports.deleteActivity = factory.deleteOne(Activity);

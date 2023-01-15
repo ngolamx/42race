@@ -9,6 +9,10 @@ require('dotenv').config()
 
 const authRoutes = require('./routes/auth')
 const webhookRoutes = require('./routes/webhook')
+const accountRoutes = require('./routes/account');
+const activityRoutes = require('./routes/activity');
+const AppError = require('./utils/appError');
+const errorController = require('./controllers/errorController');
 
 const app = express()
 app.use(bodyParser.json())
@@ -33,7 +37,16 @@ app.use(express.static('public'))
 app.use('/webhook', webhookRoutes)
 app.use('/authorize', authRoutes)
 app.use(ensureAuthenticated)
+app.use('/api/accounts', accountRoutes)
+app.use('/api/activities', activityRoutes)
 app.use(errorLogger)
+
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
+
+app.use(errorController)
+
 
 
 app.listen(process.env.PORT, () => {
