@@ -1,7 +1,6 @@
 const winston = require('winston');
 const expressWinston = require('express-winston');
-
-module.exports.logger = expressWinston.logger({
+const config = {
   transports: [
     new winston.transports.Console()
   ],
@@ -15,7 +14,8 @@ module.exports.logger = expressWinston.logger({
   expressFormat: true,
   colorize: false,
   ignoreRoute: function (req, res) { return false; }
-});
+}
+module.exports.logger = expressWinston.logger(config);
 
 
 module.exports.errorLogger = expressWinston.errorLogger({
@@ -29,3 +29,5 @@ module.exports.errorLogger = expressWinston.errorLogger({
   meta: false,
   metaField: null,
 });
+
+module.exports.log = winston.createLogger(config); 

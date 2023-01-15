@@ -1,11 +1,12 @@
 'use strict';
 const express = require('express')
+const { addNewlyActivities } = require('../controllers/activities')
+const { attachUserInfo } = require('../utils/common')
 
 const router = express.Router()
 
-router.post('/', (req, res) => {
-    // TODO create activities records
-});
+
+router.post('/', attachUserInfo, addNewlyActivities)
 router.get('/', (req, res) => {
   const VERIFY_TOKEN = process.env.STRAVA_VERIFY_TOKEN;
   let mode = req.query['hub.mode'];
@@ -20,5 +21,6 @@ router.get('/', (req, res) => {
     }
   }
 });
+
 
 module.exports = router
