@@ -7,4 +7,5 @@ html
         img.strava-icon(src="/img/strava-icon.png", alt="Strava Icon")
         h2.label Strava
         a.athlet-link(href= athletUrl)= athletUrl
+        h3.label= `Bearer: ${token}`
         a.disconnect-btn(href="/authorize/disconnect") Disconnect

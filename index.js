@@ -1,8 +1,9 @@
 const express = require('express')
+const mongoose = require('mongoose');
 const session = require('express-session')
 const bodyParser = require('body-parser')
 const passport = require('passport')
-const { logger, errorLogger } = require('./utils/logger')
+const { logger, errorLogger, log } = require('./utils/logger')
 const { ensureAuthenticated } = require('./utils/common')
 require('dotenv').config()
 
@@ -36,5 +37,15 @@ app.use(errorLogger)
 
 
 app.listen(process.env.PORT, () => {
-  console.log(`42Race listening on port ${process.env.PORT}`)
+  log.info(`42Race listening on port ${process.env.PORT}`)
 })
+
+try {
+  mongoose
+    .set('strictQuery', true)
+    .connect(process.env.MONGODB_URL, {
+      autoIndex: true
+    })
+} catch(err) {
+  log.error(err)
+}

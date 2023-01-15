@@ -2,6 +2,8 @@ const express = require('express')
 const passport = require('passport')
 const StravaStrategy = require('passport-strava-oauth2').Strategy
 const { ensureAuthenticated } = require('../utils/common')
+const Account = require('../models/account')
+const { log } = require('../utils/logger')
 
 const STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID
 const STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET
@@ -42,13 +44,17 @@ router.get('/', function(req, res, next){
 router.get('/strava/callback', 
   passport.authenticate('strava', { failureRedirect: '/' }),
   function(req, res) {
+    Account.create(req.user._json)
+    .catch(err => {
+      log.error(err);
+    })
     res.redirect('/authorize/auth-success');
   });
 
 router.use(ensureAuthenticated)
 router.get('/auth-success', function(req, res, next){
     const userID = req.user.id
-    res.render('auth-success', { athletUrl: `https://wwww.strava.com/athletes/${userID}`})
+    res.render('auth-success', { athletUrl: `https://wwww.strava.com/athletes/${userID}`, token: req.user.token})
 });
 router.get('/disconnect', function(req, res){
   req.logout();
