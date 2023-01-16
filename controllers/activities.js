@@ -3,6 +3,8 @@ const moment = require('moment')
 const { log } = require('../utils/logger')
 const Activity = require('../models/activity');
 const factory = require('./handlerFactory');
+const { catchAsync } = require('../utils/common');
+const APIFeatures = require('../utils/apiFeatures');
 
 exports.addNewlyActivities = async function (req, res) {
     if (req.user) {
@@ -27,8 +29,28 @@ exports.addNewlyActivities = async function (req, res) {
 }
 
 
-exports.getAllActivities = factory.getAll(Activity);
 exports.getActivity = factory.getOne(Activity);
 exports.createActivity = factory.createOne(Activity);
 exports.updateActivity = factory.updateOne(Activity);
 exports.deleteActivity = factory.deleteOne(Activity);
+
+exports.getAllActivities = catchAsync(async (req, res) => {
+    const features = new APIFeatures(Activity.find({}), req.query)
+        .filter()
+        .sort()
+    let doc = await features.query;
+    if (req.query.user) {
+        doc = doc.filter(activity => {
+            return Object.entries(req.query.user).reduce((acc, curr) => {
+                return acc & activity.user[curr[0]] === curr[1]
+            }, true)
+        })
+    }
+    res.status(200).json({
+        status: 'success',
+        results: doc.length,
+        data: {
+            data: doc
+        }
+    });
+})

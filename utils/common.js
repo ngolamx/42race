@@ -10,7 +10,7 @@ module.exports.attachUserInfo = function(req, res, next) {
       }
       const id = req.body.owner_id
       const users = Object.values(sessions).map(item => item.passport).filter(item => item)
-      const user = users.find(item => item.user.id === id)
+      const user = users.find(item => item.user && item.user.id === id)
       if (user) {
         req.user = user.user;
       }

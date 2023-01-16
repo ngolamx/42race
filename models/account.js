@@ -11,6 +11,11 @@ const accountScheme = new mongoose.Schema(
         username : String,
         firstname : String,
         lastname : String,
+        city : String,
+        state : String,
+        country : String,
+        sex : String,
+        premium : Boolean,
     }
 )
 

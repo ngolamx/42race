@@ -58,10 +58,29 @@ const activityScheme = new mongoose.Schema(
         pr_count: Number,
         total_photo_count: Number,
         has_kudoed: Boolean
+    },
+    {
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true }
     }
 )
 
 activityScheme.index({ id: 1 })
+
+// Map account to activity
+activityScheme.virtual('user', {
+    ref: 'Account',
+    foreignField: 'id',
+    localField: 'athlete.id',
+    justOne: true
+})
+
+activityScheme.pre(/^find/, function(next) {
+    this.populate({
+        path: 'user'
+    })
+    next()
+})
 
 const Activity = mongoose.model('Activity', activityScheme)
 
