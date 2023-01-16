@@ -4,6 +4,7 @@ const StravaStrategy = require('passport-strava-oauth2').Strategy
 const { ensureAuthenticated } = require('../utils/common')
 const Account = require('../models/account')
 const { log } = require('../utils/logger')
+const axios = require('axios')
 
 const STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID
 const STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET
@@ -56,7 +57,17 @@ router.get('/auth-success', function(req, res, next){
     const userID = req.user.id
     res.render('auth-success', { athletUrl: `https://wwww.strava.com/athletes/${userID}`, token: req.user.token})
 });
-router.get('/disconnect', function(req, res){
+router.get('/disconnect', async function(req, res){
+  try {
+    await axios.post('https://www.strava.com/oauth/deauthorize', null, {
+        headers: {
+            'Authorization': 'Bearer ' + req.user.token
+        }
+    })
+    log.info("Deauthorize successfully!")
+  } catch(err) {
+    log.err(err.message)
+  }
   req.logout();
   res.redirect('/');
 });
